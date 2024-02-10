@@ -23,7 +23,7 @@ fn download_and_unpack() -> Result<()> {
     let response = reqwest::blocking::get(url)?.error_for_status()?;
     let decoder = GzDecoder::new(response);
     let mut archive = Archive::new(decoder);
-    let prefix = format!("yaml-test-suite-{}", TAG);
+    let prefix = format!("yaml-test-suite-{TAG}");
 
     let yaml_test_suite = Path::new("yaml-test-suite");
     if yaml_test_suite.exists() {

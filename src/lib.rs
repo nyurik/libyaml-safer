@@ -1,5 +1,6 @@
 #![doc = include_str!("../README.md")]
 #![doc(html_root_url = "https://docs.rs/libyaml-safer/0.1.0")]
+#![warn(unused_qualifications)]
 #![warn(clippy::pedantic)]
 #![allow(
     clippy::cast_lossless,

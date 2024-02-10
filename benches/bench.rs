@@ -32,7 +32,7 @@ pub fn parser(c: &mut Criterion) {
             );
             let mut document = MaybeUninit::zeroed();
             if !yaml_parser_load(&mut parser, document.as_mut_ptr()).ok {
-                panic!("yaml_parser_load faled");
+                panic!("yaml_parser_load failed");
             };
             yaml_document_delete(document.as_mut_ptr());
             yaml_parser_delete(&mut parser);
@@ -82,7 +82,7 @@ pub fn parser(c: &mut Criterion) {
             );
             let mut document = MaybeUninit::zeroed();
             if !yaml_parser_load(&mut parser, document.as_mut_ptr()).ok {
-                panic!("yaml_parser_load faled");
+                panic!("yaml_parser_load failed");
             };
             yaml_parser_delete(&mut parser);
             document.assume_init()

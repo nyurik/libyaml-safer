@@ -1769,7 +1769,7 @@ impl<'w> Emitter<'w> {
 
     /// Flush the accumulated characters to the output.
     pub fn flush(&mut self) -> Result<()> {
-        assert!((self.write_handler).is_some());
+        assert!(self.write_handler.is_some());
         assert_ne!(self.encoding, Encoding::Any);
 
         if self.buffer.is_empty() {

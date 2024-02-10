@@ -1,3 +1,4 @@
+#![warn(unused_qualifications)]
 #![warn(clippy::pedantic)]
 #![allow(
     clippy::cast_lossless,
@@ -25,7 +26,7 @@ pub(crate) fn test_main(
 ) -> Result<(), Box<dyn Error>> {
     let mut parser = Parser::new();
 
-    let mut stdin = std::io::BufReader::new(stdin);
+    let mut stdin = io::BufReader::new(stdin);
     parser.set_input(&mut stdin);
 
     loop {
@@ -41,25 +42,25 @@ pub(crate) fn test_main(
 
         match &event.data {
             EventData::StreamStart { .. } => {
-                _ = writeln!(stdout, "+STR");
+                _ = stdout.write_all("+STR\n".as_bytes());
             }
             EventData::StreamEnd => {
                 is_end = true;
-                _ = writeln!(stdout, "-STR");
+                _ = stdout.write_all("-STR\n".as_bytes());
             }
             EventData::DocumentStart { implicit, .. } => {
-                _ = write!(stdout, "+DOC");
+                _ = stdout.write_all("+DOC".as_bytes());
                 if !implicit {
-                    _ = write!(stdout, " ---");
+                    _ = stdout.write_all(" ---".as_bytes());
                 }
-                _ = writeln!(stdout);
+                _ = stdout.write_all("\n".as_bytes());
             }
             EventData::DocumentEnd { implicit } => {
-                _ = write!(stdout, "-DOC");
+                _ = stdout.write_all("-DOC".as_bytes());
                 if !implicit {
-                    _ = write!(stdout, " ...");
+                    _ = stdout.write_all(" ...".as_bytes());
                 }
-                _ = writeln!(stdout);
+                _ = stdout.write_all("\n".as_bytes());
             }
             EventData::Alias { anchor } => {
                 _ = writeln!(stdout, "=ALI *{anchor}");
@@ -71,7 +72,7 @@ pub(crate) fn test_main(
                 style,
                 ..
             } => {
-                let _ = write!(stdout, "=VAL");
+                let _ = stdout.write_all("=VAL".as_bytes());
                 if let Some(anchor) = anchor {
                     _ = write!(stdout, " &{anchor}");
                 }
@@ -87,33 +88,33 @@ pub(crate) fn test_main(
                     _ => process::abort(),
                 });
                 print_escaped(stdout, value);
-                _ = writeln!(stdout);
+                _ = stdout.write_all("\n".as_bytes());
             }
             EventData::SequenceStart { anchor, tag, .. } => {
-                let _ = write!(stdout, "+SEQ");
+                let _ = stdout.write_all("+SEQ".as_bytes());
                 if let Some(anchor) = anchor {
                     _ = write!(stdout, " &{anchor}");
                 }
                 if let Some(tag) = tag {
                     _ = write!(stdout, " <{tag}>");
                 }
-                _ = writeln!(stdout);
+                _ = stdout.write_all("\n".as_bytes());
             }
             EventData::SequenceEnd => {
-                _ = writeln!(stdout, "-SEQ");
+                _ = stdout.write_all("-SEQ\n".as_bytes());
             }
             EventData::MappingStart { anchor, tag, .. } => {
-                let _ = write!(stdout, "+MAP");
+                let _ = stdout.write_all("+MAP".as_bytes());
                 if let Some(anchor) = anchor {
                     _ = write!(stdout, " &{anchor}");
                 }
                 if let Some(tag) = tag {
                     _ = write!(stdout, " <{tag}>");
                 }
-                _ = writeln!(stdout);
+                _ = stdout.write_all("\n".as_bytes());
             }
             EventData::MappingEnd => {
-                _ = writeln!(stdout, "-MAP");
+                _ = stdout.write_all("-MAP\n".as_bytes());
             }
         }
 
@@ -142,7 +143,7 @@ fn print_escaped(stdout: &mut dyn Write, s: &str) {
 fn main() -> ExitCode {
     let args = env::args_os().skip(1);
     if args.len() == 0 {
-        let _ = writeln!(io::stderr(), "Usage: run-parser-test-suite <in.yaml>...");
+        _ = io::stderr().write_all("Usage: run-parser-test-suite <in.yaml>...".as_bytes());
         return ExitCode::FAILURE;
     }
     for arg in args {

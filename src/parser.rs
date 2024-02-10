@@ -160,9 +160,8 @@ impl<'r> Parser<'r> {
     ///
     /// Call the function subsequently to produce a sequence of events
     /// corresponding to the input stream. The initial event has the type
-    /// [`EventData::StreamStart`](crate::EventData::StreamStart) while the
-    /// ending event has the type
-    /// [`EventData::StreamEnd`](crate::EventData::StreamEnd).
+    /// [`EventData::StreamStart`] while the ending event has the type
+    /// [`EventData::StreamEnd`].
     ///
     /// An application must not alternate the calls of [`Parser::parse()`] with
     /// the calls of [`Document::load()`](crate::Document::load). Doing this
@@ -408,7 +407,8 @@ impl<'r> Parser<'r> {
                 for tag_directive in &self.tag_directives {
                     if tag_directive.handle == *tag_handle_value {
                         let suffix = tag_suffix.as_deref().unwrap_or("");
-                        tag = Some(alloc::format!("{}{}", tag_directive.prefix, suffix));
+                        let prefix = &tag_directive.prefix;
+                        tag = Some(alloc::format!("{prefix}{suffix}"));
                         break;
                     }
                 }

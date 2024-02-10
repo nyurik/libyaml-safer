@@ -75,19 +75,19 @@ impl<'r> Scanner<'r> {
 
     /// Set a string input.
     pub fn set_input_string(&mut self, input: &'r mut &[u8]) {
-        assert!((self.read_handler).is_none());
+        assert!(self.read_handler.is_none());
         self.read_handler = Some(input);
     }
 
     /// Set a generic input handler.
     pub fn set_input(&mut self, input: &'r mut dyn std::io::BufRead) {
-        assert!((self.read_handler).is_none());
+        assert!(self.read_handler.is_none());
         self.read_handler = Some(input);
     }
 
     /// Set the source encoding.
     pub fn set_encoding(&mut self, encoding: Encoding) {
-        assert!(self.encoding == Encoding::Any);
+        assert_eq!(self.encoding, Encoding::Any);
         self.encoding = encoding;
     }
 
@@ -451,8 +451,9 @@ impl<'r> Scanner<'r> {
             },
         };
         self.simple_keys.push(empty_simple_key);
-        assert!(
-            self.flow_level != i32::MAX,
+        assert_ne!(
+            self.flow_level,
+            i32::MAX,
             "parser.flow_level integer overflow"
         );
         self.flow_level += 1;

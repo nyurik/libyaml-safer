@@ -1,3 +1,4 @@
+#![warn(unused_qualifications)]
 #![warn(clippy::pedantic)]
 #![allow(
     clippy::cast_lossless,
