@@ -163,10 +163,7 @@ fn get_value<'a>(line: &str, buffer: &'a mut String, style: &mut ScalarStyle) ->
 fn main() -> ExitCode {
     let args = env::args_os().skip(1);
     if args.len() == 0 {
-        let _ = writeln!(
-            io::stderr(),
-            "Usage: run-emitter-test-suite <test.event>...",
-        );
+        eprintln!("Usage: run-emitter-test-suite <test.event>...");
         return ExitCode::FAILURE;
     }
     for arg in args {
@@ -174,7 +171,7 @@ fn main() -> ExitCode {
         let mut stdout = io::stdout();
         let result = test_main(&mut stdin, &mut stdout);
         if let Err(err) = result {
-            let _ = writeln!(io::stderr(), "{err}");
+            eprintln!("{err}");
             return ExitCode::FAILURE;
         }
     }
