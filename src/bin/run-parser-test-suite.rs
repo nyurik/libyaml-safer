@@ -42,25 +42,25 @@ pub(crate) fn test_main(
 
         match &event.data {
             EventData::StreamStart { .. } => {
-                _ = stdout.write_all("+STR\n".as_bytes());
+                _ = writeln!(stdout, "+STR");
             }
             EventData::StreamEnd => {
                 is_end = true;
-                _ = stdout.write_all("-STR\n".as_bytes());
+                _ = writeln!(stdout, "-STR");
             }
             EventData::DocumentStart { implicit, .. } => {
-                _ = stdout.write_all("+DOC".as_bytes());
+                _ = write!(stdout, "+DOC");
                 if !implicit {
-                    _ = stdout.write_all(" ---".as_bytes());
+                    _ = write!(stdout, " ---");
                 }
-                _ = stdout.write_all("\n".as_bytes());
+                _ = writeln!(stdout);
             }
             EventData::DocumentEnd { implicit } => {
-                _ = stdout.write_all("-DOC".as_bytes());
+                _ = write!(stdout, "-DOC");
                 if !implicit {
-                    _ = stdout.write_all(" ...".as_bytes());
+                    _ = write!(stdout, " ...");
                 }
-                _ = stdout.write_all("\n".as_bytes());
+                _ = writeln!(stdout);
             }
             EventData::Alias { anchor } => {
                 _ = writeln!(stdout, "=ALI *{anchor}");
@@ -72,7 +72,7 @@ pub(crate) fn test_main(
                 style,
                 ..
             } => {
-                let _ = stdout.write_all("=VAL".as_bytes());
+                let _ = write!(stdout, "=VAL");
                 if let Some(anchor) = anchor {
                     _ = write!(stdout, " &{anchor}");
                 }
@@ -88,33 +88,33 @@ pub(crate) fn test_main(
                     _ => process::abort(),
                 });
                 print_escaped(stdout, value);
-                _ = stdout.write_all("\n".as_bytes());
+                _ = writeln!(stdout);
             }
             EventData::SequenceStart { anchor, tag, .. } => {
-                let _ = stdout.write_all("+SEQ".as_bytes());
+                let _ = write!(stdout, "+SEQ");
                 if let Some(anchor) = anchor {
                     _ = write!(stdout, " &{anchor}");
                 }
                 if let Some(tag) = tag {
                     _ = write!(stdout, " <{tag}>");
                 }
-                _ = stdout.write_all("\n".as_bytes());
+                _ = writeln!(stdout);
             }
             EventData::SequenceEnd => {
-                _ = stdout.write_all("-SEQ\n".as_bytes());
+                _ = writeln!(stdout, "-SEQ");
             }
             EventData::MappingStart { anchor, tag, .. } => {
-                let _ = stdout.write_all("+MAP".as_bytes());
+                let _ = write!(stdout, "+MAP");
                 if let Some(anchor) = anchor {
                     _ = write!(stdout, " &{anchor}");
                 }
                 if let Some(tag) = tag {
                     _ = write!(stdout, " <{tag}>");
                 }
-                _ = stdout.write_all("\n".as_bytes());
+                _ = writeln!(stdout);
             }
             EventData::MappingEnd => {
-                _ = stdout.write_all("-MAP\n".as_bytes());
+                _ = writeln!(stdout, "-MAP");
             }
         }
 
